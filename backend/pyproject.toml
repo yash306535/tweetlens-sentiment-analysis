@@ -1,0 +1,9 @@
+[project]
+name = "tweetlens"
+version = "1.0.0"
+description = "A litmus test for tweets: sentiment models you can watch think."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

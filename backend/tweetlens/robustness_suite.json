@@ -1,0 +1,95 @@
+{
+  "about": "Tweets written by hand for TweetLens to trip sentiment models up. Each one has the label a careful human reader would give it and a sentence on why it is hard.",
+  "categories": [
+    {
+      "id": "negation",
+      "name": "Negation",
+      "tests": [
+        {"text": "Not bad at all, honestly", "expected": "positive", "why": "Two negative words, bad and not, that cancel out."},
+        {"text": "I don't hate it", "expected": "positive", "why": "A negated negative word. Mildly positive, not negative."},
+        {"text": "Not the worst film I've seen this year", "expected": "neutral", "why": "Faint praise: worst is negated but nothing good is said."},
+        {"text": "I can't say I enjoyed a single minute of it", "expected": "negative", "why": "The negation sits several words before enjoyed."}
+      ]
+    },
+    {
+      "id": "sarcasm",
+      "name": "Sarcasm",
+      "tests": [
+        {"text": "Oh great, my flight is delayed again. Just what I needed.", "expected": "negative", "why": "Every positive word is meant ironically."},
+        {"text": "Wow, thanks for losing my luggage. Really appreciate it", "expected": "negative", "why": "Thanks and appreciate praise the very thing being complained about."},
+        {"text": "I just love waiting on hold for three hours", "expected": "negative", "why": "Love is sincere in form and sarcastic in meaning."},
+        {"text": "Yeah because Mondays are the best", "expected": "negative", "why": "The because-clause signals mockery, not praise."}
+      ]
+    },
+    {
+      "id": "hinglish",
+      "name": "Hinglish",
+      "tests": [
+        {"text": "Movie ekdum bakwas thi yaar, paisa barbaad", "expected": "negative", "why": "Romanised Hindi: totally rubbish, money wasted. No English sentiment words at all."},
+        {"text": "Aaj ka match zabardast tha, maza aa gaya!", "expected": "positive", "why": "Today's match was awesome, it was fun. Only the Hinglish words carry the tone."},
+        {"text": "Service bilkul achhi nahi thi", "expected": "negative", "why": "Hindi puts nahi (not) after the word it negates: good, not."},
+        {"text": "Thank you bhai, tum bahut achhe ho", "expected": "positive", "why": "Mixed English and Hindi; the praise is in Hindi."}
+      ]
+    },
+    {
+      "id": "emoji",
+      "name": "Emoji only",
+      "tests": [
+        {"text": "😂😂😂", "expected": "positive", "why": "No words at all. Tears of joy means laughter."},
+        {"text": "😡😡", "expected": "negative", "why": "No words at all; only the emoji carries anger."},
+        {"text": "💔", "expected": "negative", "why": "A single symbol."},
+        {"text": "🔥🔥🙌", "expected": "positive", "why": "Fire means great here, not danger."}
+      ]
+    },
+    {
+      "id": "contrast",
+      "name": "But clauses",
+      "tests": [
+        {"text": "The food was great but the service was painfully slow", "expected": "negative", "why": "What follows but usually decides the tone."},
+        {"text": "It started boring but the ending blew me away", "expected": "positive", "why": "Boring comes first; the verdict comes after but."},
+        {"text": "Nice phone, shame about the battery", "expected": "negative", "why": "A compliment followed by the complaint that matters."},
+        {"text": "Expensive, but worth every penny", "expected": "positive", "why": "A drawback conceded, then outweighed."}
+      ]
+    },
+    {
+      "id": "emphasis",
+      "name": "Emphasis",
+      "tests": [
+        {"text": "This is soooooo goooood!!!", "expected": "positive", "why": "Stretched spelling hides the word good from a plain dictionary."},
+        {"text": "WORST. DAY. EVER.", "expected": "negative", "why": "Capitals and full stops add force, not words."},
+        {"text": "meh", "expected": "negative", "why": "One short word of disappointment."},
+        {"text": "best. thing. ever.", "expected": "positive", "why": "Fragmented emphasis without capitals."}
+      ]
+    },
+    {
+      "id": "slang",
+      "name": "Slang and typos",
+      "tests": [
+        {"text": "luv this sooo much, ur the best", "expected": "positive", "why": "Love and your are misspelled on purpose."},
+        {"text": "this phone is trash, battery died in 2hrs smh", "expected": "negative", "why": "Trash and smh (shaking my head) are slang."},
+        {"text": "that concert was sick, no cap", "expected": "positive", "why": "Sick means excellent here."},
+        {"text": "the new update is lowkey mid", "expected": "negative", "why": "Mid means mediocre in current slang."}
+      ]
+    },
+    {
+      "id": "neutral",
+      "name": "Charged words, neutral facts",
+      "tests": [
+        {"text": "Kill the process and restart the server", "expected": "neutral", "why": "Kill is a technical instruction, not violence."},
+        {"text": "The documentary about the war airs tonight at 9", "expected": "neutral", "why": "War is the subject, not the writer's feeling."},
+        {"text": "Is the new update any good?", "expected": "neutral", "why": "Good appears inside a question."},
+        {"text": "Storm warning lifted for the county at 6pm", "expected": "neutral", "why": "A news update; the charged word warning is being withdrawn."}
+      ]
+    },
+    {
+      "id": "hashtags",
+      "name": "Hashtags",
+      "tests": [
+        {"text": "Flying with them tomorrow #NeverAgain", "expected": "negative", "why": "The whole verdict is inside the hashtag."},
+        {"text": "Finally got my visa! #blessed", "expected": "positive", "why": "A lowercase hashtag that has to be read as a word."},
+        {"text": "Three hours at the DMV #FML", "expected": "negative", "why": "An abbreviation inside a hashtag."},
+        {"text": "Morning run done #GoodVibesOnly", "expected": "positive", "why": "Three words joined in capitals."}
+      ]
+    }
+  ]
+}

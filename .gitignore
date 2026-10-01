@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Downloaded data and trained models (rebuilt by `make setup`)
+backend/data/
+backend/artifacts/
+
+# Frontend
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Local
+.DS_Store
+.env
