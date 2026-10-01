@@ -16,4 +16,4 @@ frontend/dist/
 # Local
 .DS_Store
 .env
-screenshots/
+frontend/screenshots/
