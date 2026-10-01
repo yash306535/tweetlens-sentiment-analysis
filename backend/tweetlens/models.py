@@ -127,7 +127,9 @@ class Readers:
     def explain(self, text: str, model_id: str, max_words: int = 80) -> dict:
         """Leave-one-out: a word's weight is how far the score moves when the
         word is removed and the tweet is read again. Positive weights pushed the
-        score up (toward positive), negative ones pulled it down."""
+        score up (toward positive), negative ones pulled it down.
+
+        `start` and `end` are code-point offsets (Python string indices)."""
         spans = [(m.start(), m.end()) for m in re.finditer(r"\S+", text)][:max_words]
         variants = [text]
         for start, end in spans:

@@ -1,0 +1,39 @@
+.strip {
+  position: relative;
+  flex: none;
+}
+
+.strip--horizontal {
+  width: 100%;
+}
+
+.strip__svg {
+  display: block;
+  overflow: visible;
+}
+
+.strip__paper {
+  fill: var(--strip-paper);
+}
+
+.strip__fibre {
+  opacity: var(--fibre-opacity);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .strip__fibre {
+  mix-blend-mode: screen;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .strip__fibre {
+    mix-blend-mode: screen;
+  }
+}
+
+.strip__outline {
+  fill: none;
+  stroke: var(--bench);
+  stroke-width: 1;
+}

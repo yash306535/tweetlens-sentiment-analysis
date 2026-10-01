@@ -1,0 +1,68 @@
+/* The whole palette. Nothing outside these values is used anywhere.
+   Keep in sync with src/lib/tokens.ts (a test checks this). */
+
+:root {
+  color-scheme: light;
+  --paper: #f2f4f3;
+  --surface: #f2f4f3;
+  --graphite: #262b30;
+  --pencil: #5e666d;
+  --bench: #d9e0dc;
+  --acid: #c8364e;
+  --litmus: #7b5ca6;
+  --base: #2a6cb0;
+
+  /* Strip paper: paper nudged toward graphite, still from the palette. */
+  --strip-paper: color-mix(in oklch, var(--paper) 93%, var(--graphite));
+  --fibre-opacity: 0.07;
+
+  --font: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+
+  /* Type scale, ratio 1.25 */
+  --step--1: 0.875rem; /* 14 */
+  --step-0: 1rem; /* 16 */
+  --step-1: 1.25rem; /* 20 */
+  --step-2: 1.5625rem; /* 25 */
+  --step-3: 1.9375rem; /* 31 */
+  --step-4: 2.4375rem; /* 39 */
+  --step-5: 3.8125rem; /* 61 */
+
+  --measure: 70ch;
+  --rule: 1px solid var(--bench);
+
+  --radius-strip: 2px;
+  --radius-button: 4px;
+  --radius-input: 6px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #1b2025;
+    --surface: #252b31;
+    --graphite: #e4e8e6;
+    --pencil: #9aa3a9;
+    --bench: #343b42;
+    --acid: #e2566c;
+    --litmus: #9d80c8;
+    --base: #4f8fd6;
+    --strip-paper: color-mix(in oklch, var(--paper) 82%, var(--graphite));
+    --fibre-opacity: 0.05;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1b2025;
+  --surface: #252b31;
+  --graphite: #e4e8e6;
+  --pencil: #9aa3a9;
+  --bench: #343b42;
+  --acid: #e2566c;
+  --litmus: #9d80c8;
+  --base: #4f8fd6;
+  --strip-paper: color-mix(in oklch, var(--paper) 82%, var(--graphite));
+  --fibre-opacity: 0.05;
+}

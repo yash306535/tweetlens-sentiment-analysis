@@ -1,0 +1,89 @@
+.composer {
+  display: grid;
+  gap: 12px;
+}
+
+.composer__box {
+  border: 1px solid var(--pencil);
+  border-radius: var(--radius-input);
+  background: var(--surface);
+}
+
+.composer__box:focus-within {
+  outline: 2px solid var(--graphite);
+  outline-offset: 2px;
+}
+
+.composer__input {
+  display: block;
+  width: 100%;
+  min-height: 112px;
+  padding: 14px 16px 4px;
+  border: 0;
+  border-radius: var(--radius-input) var(--radius-input) 0 0;
+  background: transparent;
+  color: var(--graphite);
+  font: inherit;
+  font-size: var(--step-1);
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.composer__input:focus-visible {
+  outline: none;
+}
+
+.composer__foot {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 12px 10px;
+}
+
+.composer__input::placeholder {
+  color: var(--pencil);
+  opacity: 1;
+}
+
+.composer__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.composer__examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.composer__examples-label {
+  margin-right: 4px;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.counter__left {
+  font-size: var(--step--1);
+  color: var(--pencil);
+}
+
+.counter__left.is-near {
+  color: var(--graphite);
+  font-weight: 700;
+}
+
+.counter__left--over {
+  color: var(--acid);
+  font-weight: 700;
+}
+
+.counter__progress {
+  transition: stroke-dasharray 120ms linear;
+}

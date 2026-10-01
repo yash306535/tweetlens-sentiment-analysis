@@ -97,8 +97,10 @@ No drop shadows anywhere. Radius is chosen per element:
 
 ## 2. Typography
 
-One family: **Atkinson Hyperlegible Next** (Google Fonts, weights 400/500/700,
-plus italic 400), fallback `"Atkinson Hyperlegible", system-ui, sans-serif`.
+One family: **Atkinson Hyperlegible Next** (the Google Fonts release, weights
+400/500/700 plus italic 400), fallback `"Atkinson Hyperlegible", system-ui, sans-serif`.
+The files are self-hosted through Fontsource, which packages the same Google
+Fonts files: no third-party request, and the app works offline.
 
 Scale, ratio 1.25:
 
@@ -131,7 +133,7 @@ headings, no headline with a single coloured or italic word.
 | Wick         | colour rises from the bottom behind an SVG mask whose top edge is a soft, slightly irregular wave (two summed sines, ±3px). 900ms, `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out). The wave keeps a slow drift for 900ms, then flattens to a faint ±1px meniscus. |
 | Glide        | analyze-as-you-type and model switches: no re-wick; the fill colour tweens to the new hue over 300ms (OKLCH interpolation per frame) |
 | Score        | printed beside the strip, never on it                                       |
-| Mobile (< 720px) | rotates to a horizontal band (full width × 44px) above the reading; colour wicks from left to right; the dry handle is the left 10% |
+| Mobile (< 720px) | rotates to a horizontal band (full width × 44px) above the reading; colour wicks from left to right; the dry handle is the right 10% |
 
 Reuse, so the app has one visual language:
 
@@ -418,9 +420,11 @@ D3 (scales, shapes) rendered as React SVG, token palette only.
 * Category colours: negative `--acid`, neutral `--litmus`, positive `--base`.
   Non-sentiment series (macro F1, emotions) are `--graphite` bars.
 * Confusion matrices are heatmaps on a single-hue `--litmus` ramp (from
-  `--paper` to `--litmus`, OKLCH), with the count printed in each cell. Count
-  text flips from `--graphite` to `--paper` above 55% intensity; both pass AA
-  at the extremes of the ramp.
+  `--paper` toward `--litmus`, OKLCH), with the count printed in each cell in
+  `--graphite`. The ramp stops 62% of the way to `--litmus`: measured across the
+  full ramp, neither graphite nor paper text reaches 4.5:1 between 70% and 95%,
+  while graphite stays at 5.0:1 or better up to 62% in both themes. Shade
+  encodes the share of each row (recall), the printed number is the count.
 * Axis text 14px `--pencil`.
 
 ---
