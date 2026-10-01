@@ -127,8 +127,8 @@ headings, no headline with a single coloured or italic word.
 
 | Property     | Value                                                                       |
 | ------------ | --------------------------------------------------------------------------- |
-| Size         | 72px wide, 2px radius; 320px tall on Analyze, 200px in Arena                |
-| Paper        | `--paper` mixed 4% toward `--graphite`, plus SVG `feTurbulence` fibre noise at 6% opacity (5% in dark) |
+| Size         | 72px wide, 2px radius; 320px tall on Analyze, 210px in Arena                |
+| Paper        | `--paper` mixed toward `--graphite` in OKLab (7% in Bench, 18% in Night lab), plus SVG `feTurbulence` fibre noise at 7% opacity (5% in dark) |
 | Dry handle   | the top 14% never takes colour: that is where the strip is "held"           |
 | Wick         | colour rises from the bottom behind an SVG mask whose top edge is a soft, slightly irregular wave (two summed sines, ±3px). 900ms, `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out). The wave keeps a slow drift for 900ms, then flattens to a faint ±1px meniscus. |
 | Glide        | analyze-as-you-type and model switches: no re-wick; the fill colour tweens to the new hue over 300ms (OKLCH interpolation per frame) |
@@ -140,8 +140,8 @@ Reuse, so the app has one visual language:
 * **Model arena:** four strips side by side, model name and signed score
   under each. One line of text names the outlier.
 * **Robustness lab:** a results tray. Rows are tricky tweets, columns are
-  models; each cell is a 28 × 36px swatch of strip paper in the model's hue.
-  A wrong call gets a thin 1.5px `--paper` cross drawn on the swatch (paper on
+  models; each cell is a 22 × 40px swatch of strip paper in the model's hue.
+  A wrong call gets a thin 1.75px `--paper` cross drawn on the swatch (paper on
   any ramp colour is ≥ 4.52:1).
 * **Live pulse:** a horizontal chart-recorder ribbon. Each incoming tweet adds a
   3px band that scrolls left; a rolling-average line (last 25 tweets) is drawn
@@ -294,8 +294,8 @@ x-ray, why and emotion sections scroll under it.
 │ How each model reads (four short paragraphs)                   │
 ```
 
-Mobile: strips stay side by side (4 × 64px fits in 360px with 16px gutters),
-heights shrink to 160px; confusion matrices go two per row.
+Mobile: strips stay side by side (4 × 52px fits in 360px with 16px gutters),
+heights shrink to 150px; confusion matrices stack one per row.
 
 ### 5.4 Robustness lab (`/robustness`)
 
@@ -333,7 +333,7 @@ four swatches; the expected label sits at the end of the swatch row.
 │ Replays the TweetEval test split in random order as if it were      │
 │ arriving now. There is no live connection to X.                     │
 │                                                                     │
-│ [Pause]  Speed (1×) 2× 4×  Read with [Logistic regression ▾]        │
+│ [Start the stream]  Speed (1×) 2× 4×  Read with [Logistic regr. ▾]  │
 │ Track a word [ ______ ]                                             │
 │                                                                     │
 │ +0.08  rolling average of the last 25 tweets                        │
@@ -351,8 +351,9 @@ four swatches; the expected label sits at the end of the swatch row.
 │    −0.44 Reads negative. TweetEval label: negative.                 │
 ```
 
-The ribbon pauses while the pointer is over it so a band can be clicked.
-Arrow keys move the selection between bands when the ribbon has focus.
+The stream waits for "Start the stream": a page that starts moving on its own
+would break the motion rule. The ribbon pauses while the pointer is over it (or
+it has focus) so a band can be clicked; arrow keys move the selection.
 
 ### 5.6 Bulk analyzer (`/bulk`)
 
@@ -420,7 +421,8 @@ D3 (scales, shapes) rendered as React SVG, token palette only.
 * Category colours: negative `--acid`, neutral `--litmus`, positive `--base`.
   Non-sentiment series (macro F1, emotions) are `--graphite` bars.
 * Confusion matrices are heatmaps on a single-hue `--litmus` ramp (from
-  `--paper` toward `--litmus`, OKLCH), with the count printed in each cell in
+  `--paper` toward `--litmus`, interpolated in OKLab: paper's faint green hue
+  would send an OKLCH ramp through cyan), with the count printed in each cell in
   `--graphite`. The ramp stops 62% of the way to `--litmus`: measured across the
   full ramp, neither graphite nor paper text reaches 4.5:1 between 70% and 95%,
   while graphite stays at 5.0:1 or better up to 62% in both themes. Shade
@@ -506,3 +508,40 @@ Changes made while reviewing this document:
 
 This review is repeated against the 1440px and 390px screenshots of every page
 in both themes as each page is built.
+
+---
+
+## 11. Screenshot review log
+
+Each page was captured at 1440px and 390px in both themes with
+`frontend/scripts/screenshots.mjs` (which also fails loudly if a page is wider
+than the viewport), critiqued against this file, and fixed before moving on.
+What the reviews found:
+
+| Page | Found | Fix |
+| --- | --- | --- |
+| Analyze | The web font never loaded in a sandboxed browser, so pages fell back to a system face. | Self-host the Google Fonts release through Fontsource. |
+| Analyze | An emoji in the tweet broke the "Why" text into `��`: the API counts code points, JavaScript counts UTF-16 units. | The client finds each word by searching the text instead of trusting offsets. |
+| Analyze | The character ring beside the example chips looked like a loading spinner. | Moved inside the composer's bottom-right corner, square caps, with the remaining count beside it. |
+| Analyze | The wick reached 75% of the strip in 250ms with an exponential ease; it looked like a jump. | Cubic ease-out: fast at the dip, slowing as it climbs, like liquid in paper. |
+| Analyze | Weight values sat at the far edge of the table, away from their bars. | Each value is printed at its bar's end. |
+| Analyze, 390px | The four model names wrapped into a ragged block. | A native select below 720px. |
+| Analyze | With reduced motion in development, React's double effect run aborted the demo request and the strip stayed dry. | The reduced-motion demo goes through a cancellable timer, like the animated one. |
+| Arena | Confusion matrices came out teal: OKLCH walked from paper's faint green hue to violet through cyan. | The heat ramp interpolates in OKLab. |
+| Arena | Contrast check: neither graphite nor paper text passes 4.5:1 between 70% and 95% of the heat ramp. | The ramp stops at 62%, counts are always graphite (≥ 5:1); a unit test checks every step. |
+| Arena | "Logistic regression" wrapped and pushed its score below the other three. | Wider columns; names reserve their height. |
+| Arena, 390px | The longest latency bar pushed its label 45px past the viewport. | Bars are scaled to leave room for their labels. |
+| Robustness | 28 × 36 swatches read as squares, not strips. | 22 × 40, closer to the strip's proportions. |
+| Pulse | Before the ribbon fills, the empty lane was invisible. | The lane is drawn as strip paper waiting for ink. |
+| Bulk | Day ticks under the barcode collided ("17 Feb18 Feb"). | Ticks closer than 64px to the previous one are dropped. |
+| Bulk, 390px | The sample button's no-wrap label made the page 3px wider than the screen. | Buttons wrap. |
+| Bulk, 390px | Timeline dates overlapped. | X labels are thinned to keep 64px apart. |
+| All, 390px | On short pages the top bar grew tall: the grid shared spare height between header and main. | `grid-template-rows: auto 1fr`. |
+| All, Night lab | The dry strip had a warm brown cast. Measured: Chromium's `color-mix(in oklch)` of two near-greys returns hue `none`, drawn as 0° (red). | Every `color-mix` uses OKLab. |
+| All | The select's chevron was drawn with `linear-gradient`. Not a visible gradient, but the stylesheet should hold none. | A rotated border on a wrapper. |
+
+Keyboard and motion checks run in the same pass: the skip link is the first
+tab stop, the focus ring computes to `2px solid` graphite with a 2px offset,
+arrow keys step the x-ray, the demo plays once per session and completes and
+selects its text when the composer is touched, and with reduced motion the
+reading appears at once.

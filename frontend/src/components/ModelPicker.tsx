@@ -19,13 +19,15 @@ export function ModelPicker({ value, onChange, legend = "Read with" }: Props) {
     return (
       <div className="picker-select">
         <label htmlFor={name}>{legend}</label>
-        <select id={name} className="select" value={value} onChange={(e) => onChange(e.target.value as ModelId)}>
-          {MODEL_IDS.map((id) => (
-            <option key={id} value={id}>
-              {modelName(id)}
-            </option>
-          ))}
-        </select>
+        <span className="select-wrap">
+          <select id={name} className="select" value={value} onChange={(e) => onChange(e.target.value as ModelId)}>
+            {MODEL_IDS.map((id) => (
+              <option key={id} value={id}>
+                {modelName(id)}
+              </option>
+            ))}
+          </select>
+        </span>
       </div>
     );
   }

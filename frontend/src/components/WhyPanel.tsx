@@ -82,9 +82,9 @@ export function WhyPanel({ text, model, modelName }: Props) {
           {current && (
             <>
               <p className="why__how small muted">
-                For {modelName}, each word's weight is how far the score moves when that word is removed and the
-                tweet is read again. Blue underlines pushed the score up, red ones pulled it down; thicker lines
-                mattered more. Hover over a word, or tab to it, for its exact weight.
+                For {modelName}, each word's weight is how far the score moves when that word is removed and the tweet
+                is read again. Blue underlines pushed the score up, red ones pulled it down; thicker lines mattered
+                more. Hover over a word, or tab to it, for its exact weight.
               </p>
               <WeightList explanation={current} />
             </>

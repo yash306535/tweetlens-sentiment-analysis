@@ -13,7 +13,7 @@
   --base: #2a6cb0;
 
   /* Strip paper: paper nudged toward graphite, still from the palette. */
-  --strip-paper: color-mix(in oklch, var(--paper) 93%, var(--graphite));
+  --strip-paper: color-mix(in oklab, var(--paper) 93%, var(--graphite));
   --fibre-opacity: 0.07;
 
   --font: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
@@ -48,7 +48,7 @@
     --acid: #e2566c;
     --litmus: #9d80c8;
     --base: #4f8fd6;
-    --strip-paper: color-mix(in oklch, var(--paper) 82%, var(--graphite));
+    --strip-paper: color-mix(in oklab, var(--paper) 82%, var(--graphite));
     --fibre-opacity: 0.05;
   }
 }
@@ -63,6 +63,6 @@
   --acid: #e2566c;
   --litmus: #9d80c8;
   --base: #4f8fd6;
-  --strip-paper: color-mix(in oklch, var(--paper) 82%, var(--graphite));
+  --strip-paper: color-mix(in oklab, var(--paper) 82%, var(--graphite));
   --fibre-opacity: 0.05;
 }

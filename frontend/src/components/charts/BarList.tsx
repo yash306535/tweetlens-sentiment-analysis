@@ -29,7 +29,11 @@ export function BarList({ bars, max, caption, labelWidth = "9.5rem" }: Props) {
             <span className="barlist__track">
               <span
                 className="barlist__bar"
-                style={{ width: `${(Math.max(0, b.value) / top) * 100}%`, background: b.color ?? "var(--graphite)" }}
+                style={{
+                  // Leave room for the value label at the end of the longest bar.
+                  width: `calc((100% - 4.5rem) * ${Math.max(0, b.value) / top})`,
+                  background: b.color ?? "var(--graphite)",
+                }}
               />
               <span className="barlist__value num">{b.display}</span>
             </span>

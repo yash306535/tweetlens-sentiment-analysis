@@ -20,9 +20,9 @@ const RECIPES = {
   analyze: {
     path: "/",
     async prepare(page) {
-      await page.getByPlaceholder("Paste a tweet, or write one").fill(
-        "@united Thanks for NOTHING!!! Flight delayed AGAIN 😡 #NeverFlyingUnitedAgain https://t.co/x",
-      );
+      await page
+        .getByPlaceholder("Paste a tweet, or write one")
+        .fill("@united Thanks for NOTHING!!! Flight delayed AGAIN 😡 #NeverFlyingUnitedAgain https://t.co/x");
       await page.getByRole("button", { name: "Test this tweet" }).click();
       await page.getByText("Pipeline x-ray").waitFor();
       await sleep(1500);
@@ -57,7 +57,19 @@ const RECIPES = {
   pulse: {
     path: "/pulse",
     async prepare(page) {
-      await sleep(9000);
+      await page.getByText("4×").click();
+      await page.getByRole("button", { name: "Start the stream" }).click();
+      await sleep(14000);
+      const ribbon = page.locator(".ribbon");
+      const box = await ribbon.boundingBox();
+      await page.mouse.click(box.x + box.width * 0.82, box.y + box.height - 30);
+      await sleep(600);
+    },
+  },
+  "pulse-empty": {
+    path: "/pulse",
+    async prepare() {
+      await sleep(500);
     },
   },
   bulk: {
@@ -65,7 +77,11 @@ const RECIPES = {
     async prepare(page) {
       await page.getByRole("button", { name: /Try 1,200 airline tweets/ }).click();
       await page.getByText("Mood barcode").waitFor({ timeout: 20000 });
-      await sleep(1200);
+      await sleep(800);
+      const strip = page.locator(".barcode__strip");
+      const box = await strip.boundingBox();
+      await page.mouse.click(box.x + box.width * 0.37, box.y + box.height / 2);
+      await sleep(500);
     },
   },
   "bulk-empty": {
@@ -106,6 +122,8 @@ for (const name of names) {
       // Sticky elements are drawn where the scroll position leaves them.
       await page.evaluate(() => window.scrollTo(0, 0));
       await sleep(150);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      if (overflow > 0) console.error(`[${name} ${theme} ${width}] page is ${overflow}px wider than the viewport`);
       const file = `${OUT}/${name}-${width}-${theme}.png`;
       await page.screenshot({ path: file, fullPage: true });
       console.log(file);

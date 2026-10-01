@@ -152,8 +152,7 @@ export interface PulseTweet extends Reading {
   gold: Label;
 }
 
-export const OFFLINE_MESSAGE =
-  "TweetLens can't reach its models. Start the API with `make api` and try again.";
+export const OFFLINE_MESSAGE = "TweetLens can't reach its models. Start the API with `make api` and try again.";
 
 export class ApiError extends Error {
   status: number;

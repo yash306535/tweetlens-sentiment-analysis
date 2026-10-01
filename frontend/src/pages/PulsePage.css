@@ -1,0 +1,111 @@
+.pulse__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 32px;
+}
+
+.pulse__track {
+  display: grid;
+  gap: 6px;
+  margin-top: 24px;
+  max-width: 640px;
+}
+
+.pulse__track-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pulse__track-row .input {
+  flex: 1 1 220px;
+}
+
+.pulse .notice,
+.pulse .error {
+  margin-top: 20px;
+}
+
+.pulse__recorder {
+  margin-top: 36px;
+}
+
+.pulse__avg {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin-bottom: 16px;
+}
+
+.pulse__avg-value {
+  font-size: var(--step-5);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  min-width: 4.1ch;
+}
+
+.pulse__empty {
+  display: grid;
+  place-items: center start;
+  min-height: 196px;
+  padding: 0 0 0 34px;
+  border-top: var(--rule);
+  border-bottom: var(--rule);
+}
+
+.pulse__empty p {
+  max-width: 52ch;
+}
+
+.ribbon {
+  position: relative;
+  cursor: crosshair;
+  user-select: none;
+}
+
+.ribbon:focus-visible {
+  outline-offset: 4px;
+}
+
+.ribbon__now {
+  position: absolute;
+  right: 0;
+  padding: 0 0 0 6px;
+  background: var(--paper);
+  font-weight: 700;
+  transition: top 200ms linear;
+  pointer-events: none;
+}
+
+.pulse__axis {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0 0 34px;
+}
+
+.pulse__totals {
+  margin-top: 20px;
+}
+
+.pulse__chosen {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.pulse__chosen-text {
+  font-size: var(--step-1);
+  line-height: 1.45;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 719px) {
+  .pulse__avg-value {
+    font-size: var(--step-4);
+  }
+}

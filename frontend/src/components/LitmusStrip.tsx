@@ -276,14 +276,7 @@ export function LitmusStrip({
       className={`strip strip--${orientation}`}
       style={vertical ? { width: W, height: H } : { height: H, width: length ?? "100%" }}
     >
-      <svg
-        width={W}
-        height={H}
-        viewBox={`0 0 ${W} ${H}`}
-        role="img"
-        aria-label={label}
-        className="strip__svg"
-      >
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} className="strip__svg">
         <defs>
           <clipPath id={`clip-${id}`}>
             <rect x="0" y="0" width={W} height={H} rx="2" ry="2" />

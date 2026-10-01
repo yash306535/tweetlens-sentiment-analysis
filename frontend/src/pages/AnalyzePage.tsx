@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { Composer } from "../components/Composer";
 import { EmotionPanel } from "../components/EmotionPanel";
@@ -7,16 +7,15 @@ import { ModelPicker } from "../components/ModelPicker";
 import { PipelineXRay } from "../components/PipelineXRay";
 import { ScoreReading } from "../components/ScoreReading";
 import { WhyPanel } from "../components/WhyPanel";
-import { api, ApiError, type Analysis } from "../lib/api";
 import { formatScore } from "../lib/format";
 import { prefersReducedMotion, useMediaQuery } from "../lib/motion";
 import { useApp } from "../lib/store";
+import { useReading } from "../lib/useReading";
 import "./AnalyzePage.css";
 
 const DEMO_TEXT = "Not gonna lie, the new update is actually pretty good 👍";
 const DEMO_KEY = "tweetlens-demo-played";
 const TYPE_MS = 28;
-const DEBOUNCE_MS = 280;
 
 function demoPlayed(): boolean {
   try {
@@ -35,67 +34,25 @@ function markDemoPlayed() {
 }
 
 export function AnalyzePage() {
-  const { model, setModel, modelName, analysis, setAnalysis, setLastScore, meta } = useApp();
-  const [text, setText] = useState(analysis.text);
-  const [result, setResult] = useState<Analysis | null>(analysis.result);
-  const [error, setError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [dipKey, setDipKey] = useState(0);
+  const { model, setModel, modelName, analysis, meta } = useApp();
+  const { text, setText, result, error, busy, dipKey, run, type, stale } = useReading();
   const compact = useMediaQuery("(max-width: 719px)");
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const controller = useRef<AbortController | null>(null);
-  const debounce = useRef(0);
   const demo = useRef<{ timer: number; running: boolean }>({ timer: 0, running: false });
-
-  const run = useCallback(
-    (value: string, dip: boolean) => {
-      window.clearTimeout(debounce.current);
-      controller.current?.abort();
-      if (!value.trim()) {
-        setResult(null);
-        setError(null);
-        setBusy(false);
-        setAnalysis({ text: value, result: null });
-        return;
-      }
-      const ctrl = new AbortController();
-      controller.current = ctrl;
-      setBusy(true);
-      api
-        .analyze(value, ctrl.signal)
-        .then((r) => {
-          if (ctrl.signal.aborted) return;
-          setResult(r);
-          setError(null);
-          setAnalysis({ text: value, result: r });
-          if (dip) setDipKey((k) => k + 1);
-        })
-        .catch((err: ApiError) => {
-          if (err.name === "AbortError") return;
-          setError(err.message);
-        })
-        .finally(() => {
-          if (controller.current === ctrl) setBusy(false);
-        });
-    },
-    [setAnalysis],
-  );
-
-  // Keep the nav marker in the colour of the current reading.
-  useEffect(() => {
-    if (result) setLastScore(result.readings[model].score);
-  }, [result, model, setLastScore]);
 
   // The one orchestrated moment: on the first visit of a session, a demo tweet
   // types itself and the strip wicks up.
   useEffect(() => {
     if (demoPlayed() || analysis.text) return;
     if (prefersReducedMotion()) {
-      markDemoPlayed();
-      setText(DEMO_TEXT);
-      run(DEMO_TEXT, true);
-      return;
+      // No typing; the tweet and its reading simply appear.
+      const timer = window.setTimeout(() => {
+        markDemoPlayed();
+        setText(DEMO_TEXT);
+        run(DEMO_TEXT, true);
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
     const chars = Array.from(DEMO_TEXT);
     let i = 0;
@@ -126,13 +83,7 @@ export function AnalyzePage() {
     setText(DEMO_TEXT);
     run(DEMO_TEXT, true);
     requestAnimationFrame(() => inputRef.current?.select());
-  }, [run]);
-
-  const onChange = (value: string) => {
-    setText(value);
-    window.clearTimeout(debounce.current);
-    debounce.current = window.setTimeout(() => run(value, false), DEBOUNCE_MS);
-  };
+  }, [run, setText]);
 
   const onExample = (value: string) => {
     interruptDemo();
@@ -141,7 +92,6 @@ export function AnalyzePage() {
   };
 
   const reading = result?.readings[model] ?? null;
-  const stale = result !== null && result.text !== text.trim();
   const stripLabel = reading
     ? `Litmus strip: ${formatScore(reading.score)}, ${reading.label}, read by ${modelName(model)}`
     : "Litmus strip, dry: no tweet tested yet";
@@ -169,7 +119,7 @@ export function AnalyzePage() {
           ref={inputRef}
           value={text}
           labelledBy="analyze-title"
-          onChange={onChange}
+          onChange={type}
           onSubmit={() => run(text, true)}
           onExample={onExample}
           onInteract={interruptDemo}

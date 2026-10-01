@@ -4,8 +4,8 @@ import { PALETTES, type ThemeName } from "./tokens";
 
 type Ramp = (t: number) => string;
 
-function ramp(stops: string[]): Ramp {
-  const fn = interpolate(stops, "oklch");
+function ramp(stops: string[], mode: "oklch" | "oklab" = "oklch"): Ramp {
+  const fn = interpolate(stops, mode);
   return (t: number) => formatHex(fn(Math.min(1, Math.max(0, t)))) ?? stops[0];
 }
 
@@ -14,9 +14,11 @@ const scoreRamps: Record<ThemeName, Ramp> = {
   night: ramp([PALETTES.night.acid, PALETTES.night.litmus, PALETTES.night.base]),
 };
 
+// Paper is almost grey but carries a faint green hue, so an OKLCH ramp from
+// paper to litmus would swing through cyan. OKLab goes straight there instead.
 const heatRamps: Record<ThemeName, Ramp> = {
-  bench: ramp([PALETTES.bench.paper, PALETTES.bench.litmus]),
-  night: ramp([PALETTES.night.paper, PALETTES.night.litmus]),
+  bench: ramp([PALETTES.bench.paper, PALETTES.bench.litmus], "oklab"),
+  night: ramp([PALETTES.night.paper, PALETTES.night.litmus], "oklab"),
 };
 
 /** Score in [-1, 1] to a colour on the acid, litmus, base ramp (OKLCH). */

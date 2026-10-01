@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 
 import { wcagContrast } from "culori";
 import { describe, expect, it } from "vitest";
@@ -50,7 +49,7 @@ describe("heat cells", () => {
 
 describe("tokens", () => {
   it("match between tokens.css and tokens.ts", () => {
-    const css = readFileSync(resolve(__dirname, "../styles/tokens.css"), "utf8");
+    const css = readFileSync(new URL("../styles/tokens.css", import.meta.url), "utf8");
     const [light, ...rest] = css.split("@media (prefers-color-scheme: dark)");
     const dark = rest.join("");
     const read = (block: string, name: string) => block.match(new RegExp(`--${name}:\\s*(#[0-9a-f]{6})`))?.[1];

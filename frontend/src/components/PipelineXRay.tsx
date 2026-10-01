@@ -177,7 +177,9 @@ export function PipelineXRay({ stages }: Props) {
             ))}
           </AnimatePresence>
         </LayoutGroup>
-        {shown.tokens.length === 0 && <span className="xray__empty small muted">Nothing left for the model to read.</span>}
+        {shown.tokens.length === 0 && (
+          <span className="xray__empty small muted">Nothing left for the model to read.</span>
+        )}
       </div>
 
       <p className="xray__summary small muted">{summary}</p>
