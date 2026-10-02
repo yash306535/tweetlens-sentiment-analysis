@@ -152,6 +152,13 @@ export interface PulseTweet extends Reading {
   gold: Label;
 }
 
+/**
+ * Where the API lives. Empty in development and when FastAPI serves the built
+ * app itself; set VITE_API_BASE (e.g. https://tweetlens-api.onrender.com) when
+ * the frontend is hosted separately.
+ */
+const API_BASE = (import.meta.env.VITE_API_BASE ?? "").replace(/\/$/, "");
+
 export const OFFLINE_MESSAGE = "TweetLens can't reach its models. Start the API with `make api` and try again.";
 
 export class ApiError extends Error {
@@ -166,7 +173,7 @@ export class ApiError extends Error {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(path, init);
+    response = await fetch(API_BASE + path, init);
   } catch (err) {
     if ((err as Error).name === "AbortError") throw err;
     throw new ApiError(OFFLINE_MESSAGE);
@@ -214,6 +221,6 @@ export const api = {
     const q = new URLSearchParams({ model: params.model, rate: String(params.rate) });
     if (params.track) q.set("track", params.track);
     if (params.start) q.set("start", String(params.start));
-    return `/api/pulse?${q}`;
+    return `${API_BASE}/api/pulse?${q}`;
   },
 };

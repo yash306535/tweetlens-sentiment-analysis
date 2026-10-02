@@ -9,6 +9,7 @@ web app, so one process runs the whole thing.
 from __future__ import annotations
 
 import json
+import os
 import time
 from contextlib import asynccontextmanager
 from functools import lru_cache
@@ -41,7 +42,9 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="TweetLens", version="1.0.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    # Extra origins (e.g. the Netlify site) come from a comma-separated env var.
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"]
+    + [o.strip().rstrip("/") for o in os.environ.get("TWEETLENS_CORS_ORIGINS", "").split(",") if o.strip()],
     allow_methods=["*"],
     allow_headers=["*"],
 )
